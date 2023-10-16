@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block main %}
+  <h2>Direct Messages</h2>
+
+  <h3>Sent Messages</h3>
+  <ul>
+    {% for message in messages_sent %}
+      <li>{{ message.created_at }} - You: {{ message.message }}</li>
+    {% endfor %}
+  </ul>
+
+  <h3>Received Messages</h3>
+  <ul>
+    {% for message in messages_received %}
+      <li>{{ message.created_at }} - {{ message.sender.nickname }}: {{ message.message }}</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

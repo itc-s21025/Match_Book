@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{{ profile.create_by }}
+<a href="{% url 'send_like' user %}">いいねを送る</a>
+{{ matching }}
+{% if matching %}
+<a href="{% url 'send_direct_message' user %}"><h1>ダイレクトメッセージ</h1></a>
+{% endif %}
+</body>
+</html>

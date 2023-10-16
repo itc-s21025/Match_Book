@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+
+{% block main %}
+    {% for profile in opposite_gender_profiles %}
+<div class="card bg-light" style="max-width: 60rem;">
+<!-- カード上部に画像を配置 -->
+<img class="card-img-top" src="" alt="">
+<!-- カードの見出し -->
+<div class="card-body">
+    <h4 class="card-title">名前：　{{ profile.nickname }}　年齢：　{{ profile.age }}</h4>
+    <!--  カードの内容文 -->
+    <p class="card-text">{{ profile.introduction }}</p>
+</div>
+<!-- カード内のリストグループ　-->
+<ul class="list-group list-group-flush">
+    <li class="list-group-item">好きな本のジャンル：　{{ profile.favorite_book_category }}</li>
+    <li class="list-group-item">好きな著者：　{{ profile.favorite_author }}</li>
+    <li class="list-group-item">好きな本：　{{ profile.like_book }}</li>
+</ul>
+<div class="card-body">
+    <a href="{% url 'profile_detail' profile.id %}" class="card-link">詳しくプロフィールを見る</a>
+</div>
+
+</div>
+    {% endfor %}
+
+{% endblock %}
