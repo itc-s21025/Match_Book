@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <!-- 通知ポーリングのJavaScriptコードを埋め込む -->
+    <script>
+        function checkNotifications() {
+            $.ajax({
+                url: '/api/notifications/',  // 通知を取得するエンドポイント
+                method: 'GET',
+                success: function(data) {
+                    // 取得した通知を処理する
+                    console.log(data);
+                    // 通知を表示する処理を追加
+                },
+                error: function(error) {
+                    console.error('Error fetching notifications:', error);
+                }
+            });
+        }
+
+        // 一定の間隔で通知をポーリング
+        setInterval(checkNotifications, 5000);  // 5秒ごとにポーリング
+    </script>
+</head>
+<body>
+<ul>
+
+    {% for notification in notifications %}
+        <li>{{ notification.message }} - {{ notification.created_at }}</li>
+    {% endfor %}
+
+</ul>
+</body>
+</html>

@@ -9,7 +9,10 @@
 <a href="{% url 'send_like' user %}">いいねを送る</a>
 {{ matching }}
 {% if matching %}
-<a href="{% url 'send_direct_message' user %}"><h1>ダイレクトメッセージ</h1></a>
+<a href="{% url 'send_direct_message' user %}"><h1>ダイレクトメッセージを送る</h1></a>
+   <a href="{% url 'direct_messages' user %}"><h1>メッセージを見る</h1></a>
+     <a href="{% url 'show_notifications' %}"><h1>いいねを見る</h1></a>
+
 {% endif %}
 </body>
 </html>

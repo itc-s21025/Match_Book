@@ -8,7 +8,7 @@ from django.db import models
 
 class Profile(models.Model):
     create_by = models.OneToOneField(settings.AUTH_USER_MODEL,
-                                  on_delete=models.CASCADE)
+                                     on_delete=models.CASCADE)
     nickname = models.CharField("ニックネーム", max_length=20)
     created_at = models.DateTimeField("登録日時", auto_now_add=True)
     updated_at = models.DateTimeField("更新日時", auto_now=True, blank=True, null=True)
@@ -49,7 +49,6 @@ class Matching(models.Model):
 
 
 class DirectMessage(models.Model):
-
     sender = models.ForeignKey(
         Profile, related_name='sender',
         on_delete=models.CASCADE
@@ -63,3 +62,12 @@ class DirectMessage(models.Model):
 
     def __str__(self):
         return str(self.sender) + ' --- send to ---> ' + str(self.receiver)
+
+
+class Notification(models.Model):
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    message = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.message
