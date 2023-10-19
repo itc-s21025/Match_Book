@@ -16,8 +16,8 @@ def top(request):
     user_profile = request.user.profile
     user_gender = request.user.profile.sex
     matching_profiles = Profile.objects.filter(
-        Q(approaching__approached=user_profile, approaching__approved=True) |
-        Q(approached__approaching=user_profile, approached__approved=True)
+        Q(approaching__approached=user_profile) |
+        Q(approached__approaching=user_profile)
     )
 
     # 異性のプロフィールを取得
@@ -38,6 +38,38 @@ def top(request):
         }
 
         return render(request, 'top.html', context)
+    else:
+        # 適切な処理を行ってください
+        pass
+
+
+@login_required()
+def matched_list(request):
+    user_profile = request.user.profile
+    user_gender = request.user.profile.sex
+    matching_profiles = Profile.objects.filter(
+        Q(approaching__approached=user_profile) |
+        Q(approached__approaching=user_profile)
+    )
+
+    # 異性のプロフィールを取得
+    if user_gender == 'male':
+        opposite_gender = 'female'
+    elif user_gender == 'female':
+        opposite_gender = 'male'
+    else:
+        # その他の性別の場合、適切な処理を行ってください
+        opposite_gender = None
+
+    if opposite_gender:
+        # 異性のプロフィールを取得
+        opposite_gender_profiles = Profile.objects.filter(sex=opposite_gender).filter(pk__in=matching_profiles)
+
+        context = {
+            'opposite_gender_profiles': opposite_gender_profiles,
+        }
+
+        return render(request, 'matched_list.html', context)
     else:
         # 適切な処理を行ってください
         pass
@@ -119,7 +151,7 @@ def get_notifications(request):
 
 
 def show_notifications(request):
-    user_notifications = Notification.objects.filter(user=request.user)
+    user_notifications = Notification.objects.filter(user=request.user.profile)
     context = {'notifications': user_notifications}
     return render(request, 'notifications.html', context)
 

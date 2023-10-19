@@ -1,7 +1,7 @@
 from django.urls import path
 from Matching import views
 from Matching.views import profile_detail, send_like, send_direct_message, direct_messages, get_notifications, \
-    show_notifications
+    show_notifications, matched_list
 
 urlpatterns = [
     path("profile_detail/<int:profile_id>/", profile_detail, name="profile_detail"),
@@ -9,7 +9,8 @@ urlpatterns = [
     path("send_direct_message/<int:receiver_id>/", send_direct_message, name="send_direct_message"),
     path("direct_messages/<int:receiver_id>/", direct_messages, name="direct_messages"),
     path('api/notifications/', get_notifications, name='get_notifications'),
-    path('show_notifications/', show_notifications, name='show_notifications')
+    path('show_notifications/', show_notifications, name='show_notifications'),
+    path('matched_list/', matched_list, name='matched_list'),
 
 ]
 
