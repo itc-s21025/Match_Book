@@ -1,5 +1,6 @@
 from django.contrib import admin
-from Matching.models import Profile, Matching, DirectMessage
+from Matching.models import Profile, Matching, DirectMessage, Notification, NotificationMatching, BookThoughts
+
 
 # Register your models here.
 
@@ -11,4 +12,8 @@ class ProfileAdmin(admin.ModelAdmin):
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Matching)
 admin.site.register(DirectMessage)
+admin.site.register(Notification)
+admin.site.register(NotificationMatching)
+admin.site.register(BookThoughts)
+
 

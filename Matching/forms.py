@@ -1,16 +1,23 @@
-from Matching.models import Profile, DirectMessage
+from Matching.models import Profile, DirectMessage, BookThoughts
 from django import forms
 
 
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['age', 'sex', 'introduction', 'favorite_book_category', 'like_book', 'favorite_author', 'nickname',]
+        fields = ['nickname', 'age', 'sex', 'introduction', 'favorite_book_category', 'like_book', 'favorite_author',
+                  'face_image']
 
-
-from django import forms
 
 class DirectMessageForm(forms.ModelForm):
     class Meta:
         model = DirectMessage
         fields = ['message']
+
+
+class BookThoughtsForm(forms.ModelForm):
+
+    class Meta:
+        model = BookThoughts
+        fields = ['book_title', 'book_author', 'book_image_url', 'book_description', 'book_thoughts']
+

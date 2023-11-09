@@ -24,6 +24,7 @@ class Profile(models.Model):
     favorite_book_category = models.TextField("好きな本のカテゴリ", max_length=100)
     like_book = models.TextField("好きな本", max_length=256)
     favorite_author = models.TextField("好きな作家", max_length=1000)
+    face_image = models.ImageField(upload_to='photos/')
 
     def __str__(self):
         return self.nickname
@@ -71,3 +72,22 @@ class Notification(models.Model):
 
     def __str__(self):
         return self.message
+
+
+class NotificationMatching(models.Model):
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    message = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.message
+
+
+class BookThoughts(models.Model):
+    create_by = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    book_title = models.CharField('作品名', max_length=255)
+    book_author = models.CharField('著者', max_length=255)
+    book_description = models.TextField('あらすじ', max_length=1000)
+    book_image_url = models.URLField('本の画像', null=True, blank=True)
+    book_thoughts = models.TextField('感想', max_length=10000)
+    created_at = models.DateTimeField(auto_now_add=True)

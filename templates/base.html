@@ -23,18 +23,24 @@
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="#">Home</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
+       <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+           Book
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{% url 'book_thoughts_form' %}">本の感想を投稿</a></li>
+            <li><a class="dropdown-item" href="">本の感想一覧</a></li>
+
+          </ul>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-           マッチング
+           Matching
           </a>
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="{% url 'matched_list' %}">マッチング済みユーザー</a></li>
             <li><a class="dropdown-item" href="{% url 'show_notifications' %}">いいねBox</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
+            <li><a class="dropdown-item" href="{% url 'show_notifications_matching' %}">マッチング通知</a></li>
           </ul>
         </li>
         <li class="nav-item">

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block main %}
+  <h2>通知一覧</h2>
+
+  {% if notifications %}
+    <ul>
+      {% for notification in notifications %}
+        <li>{{ notification.message }} - {{ notification.created_at }}</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>通知はありません。</p>
+  {% endif %}
+{% endblock %}
+
