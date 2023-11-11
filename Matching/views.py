@@ -35,8 +35,19 @@ def top(request):
         # 異性のプロフィールを取得
         opposite_gender_profiles = Profile.objects.filter(sex=opposite_gender).exclude(pk__in=matching_profiles)
 
+        query = request.GET.get('q')
+
+        if query:
+            # キーワードがある場合、モデルから検索を行う
+            results = opposite_gender_profiles.filter(like_book__icontains=query)  # name は検索対象のフィールド
+
+            context = {'results': results, 'query': query}
+
+            return render(request, 'top.html', context)
+
         context = {
             'opposite_gender_profiles': opposite_gender_profiles,
+
         }
 
         return render(request, 'top.html', context)

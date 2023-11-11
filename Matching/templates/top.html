@@ -2,11 +2,49 @@
 {% load static %}
 
 {% block main %}
+<form method="get" action="{% url 'top' %}">
+  <input type="text" name="q" placeholder="キーワードを入力">
+  <button type="submit">検索</button>
+</form>
+    {% if query %}
+  <h2>{{ query }} の検索結果</h2>
+
+  {% if results %}
+    <ul>
+      {% for profile in results %}
+       <div class="card bg-light" style="max-width: 33rem;">
+            <!-- カード上部に画像を配置 -->
+            <img class="card-img-top" src="{{ profile.face_image.url }}" alt="non image">
+            <!-- カードの見出し -->
+            <div class="card-body">
+                <h4 class="card-title">名前：　{{ profile.nickname }}　年齢：　{{ profile.age }}</h4>
+                <!--  カードの内容文 -->
+                <p class="card-text">{{ profile.introduction }}</p>
+            </div>
+            <!-- カード内のリストグループ　-->
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">好きな本のジャンル：　{{ profile.favorite_book_category }}</li>
+                <li class="list-group-item">好きな著者：　{{ profile.favorite_author }}</li>
+                <li class="list-group-item">好きな本：　{{ profile.like_book }}</li>
+            </ul>
+            <div class="card-body">
+                <a href="{% url 'profile_detail' profile.id %}" class="card-link">詳しくプロフィールを見る</a>
+            </div>
+
+        </div>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>検索結果がありません。</p>
+  {% endif %}
+{% else %}
+  <p>キーワードを入力してください。</p>
+{% endif %}
 
     {% for profile in opposite_gender_profiles %}
         <div class="card bg-light" style="max-width: 33rem;">
             <!-- カード上部に画像を配置 -->
-            <img class="card-img-top" src="{% static 'img/cloth_00147.jpg' %}" alt="non image">
+            <img class="card-img-top" src="{{ profile.face_image.url }}" alt="non image">
             <!-- カードの見出し -->
             <div class="card-body">
                 <h4 class="card-title">名前：　{{ profile.nickname }}　年齢：　{{ profile.age }}</h4>
