@@ -1,18 +1,116 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-{{ profile.create_by }}
-<a href="{% url 'send_like' user %}">いいねを送る</a>
-{{ matching }}
-{% if matching %}
-<a href="{% url 'send_direct_message' user %}"><h1>ダイレクトメッセージを送る</h1></a>
-   <a href="{% url 'direct_messages' user %}"><h1>メッセージを見る</h1></a>
-     <a href="{% url 'show_notifications' %}"><h1>いいねを見る</h1></a>
+{% extends 'base.html' %}
+{% load static %}
+{% block extraheader %}
+    <link rel="stylesheet" href="{% static 'css/profile_detail.css' %}">
+    <link rel="stylesheet" href="{% static 'css/book_card.css' %}">
+    <style>
 
-{% endif %}
-</body>
-</html>
+        @media (min-width: 600px) {
+            #parent {
+                display: flex;
+            }
+
+            #child1 {
+                flex-grow: 1;
+                width: 400px;
+            }
+
+            #child2 {
+                flex-grow: 1;
+                width: 400px;
+            }
+        }
+
+        h5 {
+            text-align: center;
+        }
+
+        .card-img-top {
+            object-fit: cover;
+        }
+
+        .card {
+            margin-left: 75px;
+            margin-top: 30px;
+        }
+
+        .welcome {
+            border-radius: 10px 10px 10px 10px; /* 左上・右上・右下・左下 */
+            background-color: #ffffff;
+        }
+    </style>
+{% endblock %}
+{% block main %}
+    <div class="welcome h-50 p-3">
+        <h3>{{ profile.create_by }}さんのプロフィール</h3>
+    </div>
+    <div id="parent">
+        <div id="child1">
+            <div class="card w-100 p-3" style="max-width: 25rem;">
+                <img class="card-img-top" src="{{ profile.face_image.url }}" height="350px"
+                     alt="image">
+                <div class="card-body">
+                    <h4 class="card-title">{{ profile.nickname }}</h4>
+                    <p class="card-text">{{ profile.age }}歳</p>
+                    <p class="card-text">{{ profile.introduction }}</p>
+                </div>
+                <!-- list-group-flushは、ボーダーの無いリストグループ-->
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">好きな本：{{ profile.like_book }}</li>
+                    <li class="list-group-item">好きな本のジャンル：{{ profile.favorite_book_category }}</li>
+                    <li class="list-group-item">好きな著者：{{ profile.favorite_author }}</li>
+                </ul>
+                {% if matching %}
+                    {% if matching_profile %}
+                        <div class="card-body">
+                        <a href="{% url 'send_direct_message' profile.pk %}"
+                           class="card-link">メッセージを送る・見る</a>
+                        </div>
+                    {% else %}
+                        <div class="card-body">
+                            マッチング状況：相手からのいいね待ち
+                        </div>
+                    {% endif %}
+                    <!-- カードの本文：card-body -->
+
+                {% else %}
+                    <div class="card-body">
+                        <a href="{% url 'send_like' user %}" class="card-link">いいねを送る</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        <div id="child2">
+            <br>
+            <h5 class="w-100 p-3">{{ profile.nickname }}さんの投稿記事一覧</h5>
+
+            <hr class="hr1">
+
+            {% if thoughts %}
+                {% for thought in thoughts %}
+                    <div class="l-wrapper_01">
+                        <article class="card_01">
+                            <div class="card__header_01">
+                                <p class="card__title_01">作品名：　{{ thought.book_title }}</p>
+                                <figure class="card__thumbnail_01">
+                                    <img src="{{ thought.book_image_url }}" alt="サムネイル" class="card__image_01">
+                                </figure>
+                            </div>
+                            <div class="card__body_01">
+                                <p class="card__text2_01">
+                                    これはカード型のデザインです。これはカード型のデザインです。これはカード型のデザインです。これはカード型のデザインです。</p>
+                            </div>
+                            <div class="card__footer_01">
+                                <p class="card__text_01"><a href="{% url 'book_thoughts_detail' thought.pk %}"
+                                                            class="button_01 -compact">この記事を詳しく見る</a>
+                                </p>
+                            </div>
+                        </article>
+
+                    </div>
+
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

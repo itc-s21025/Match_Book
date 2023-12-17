@@ -1,7 +1,8 @@
 from django.urls import path
 from Matching import views
 from Matching.views import profile_detail, send_like, send_direct_message, direct_messages, get_notifications, \
-    show_notifications, matched_list, show_notifications_matching, book_search, book_thoughts_form
+    show_notifications, matched_list, show_notifications_matching, book_search, book_thoughts_form, book_thoughts_list, \
+    book_thoughts_detail, send_liked
 
 urlpatterns = [
     path("profile_detail/<int:profile_id>/", profile_detail, name="profile_detail"),
@@ -15,6 +16,8 @@ urlpatterns = [
     path('book_search/', book_search, name='book_search'),
     path('book_thoughts_form/', book_thoughts_form, name='book_thoughts_form'),
     path("create_profile/", views.CreateProfileView.as_view(), name="create_profile"),
-
+    path('book_thoughts_list/', book_thoughts_list, name='book_thoughts_list'),
+    path('book_thoughts/<int:thought_id>/', book_thoughts_detail, name='book_thoughts_detail'),
+    path('send_liked/', send_liked, name='send_liked'),
 ]
 

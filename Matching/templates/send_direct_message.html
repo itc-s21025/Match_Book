@@ -1,12 +1,73 @@
 {% extends 'base.html' %}
-
-{% block main %}
-    <h1>hello</h1>
-  <h2>Send Direct Message to {{ receiver.nickname }}</h2>
-  <form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Send Message</button>
-  </form>
+{% load django_bootstrap5 %}
+{% load static %}
+{% block extraheader %}
+    <link rel="stylesheet" href="{% static 'css/direct_message.css' %}">
+    <style>
+        .mom {
+            background-color: white;
+        }
+        .mom2 {
+            height: 500px;
+        }
+    </style>
 {% endblock %}
+{% block main %}
+    <div class="mom">
+    <div class="mom2">
+        <h2>Direct Messages</h2>
+        <div class="box">
+            <div id="scroller__inner">
+                <div class="line-bc"><!--①LINE会話全体を囲う-->
+                    {% for message in all_messages %}
 
+
+                        <!--②左コメント始-->
+                        {% if receiver == message.sender %}
+                            <div class="balloon6">
+                                <div class="faceicon">
+                                    <img src="{{ message.sender.face_image.url }}">
+                                </div>
+                                <div class="chatting">
+                                    <div class="says">
+                                        <p class="font">{{ message.message }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                        <!--②/左コメント終-->
+
+                        <!--③右コメント始-->
+                        {% if request_user == message.sender %}
+                            <div class="mycomment">
+                                <p class="font">
+                                    {{ message.message }}
+                                </p>
+                            </div>
+                        {% endif %}
+                        <!--/③右コメント終-->
+                    {% endfor %}
+                </div><!--/①LINE会話終了-->
+            </div>
+        </div>
+
+    </div>
+   <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="mb-3 w-100 p-3 bg-light">
+       {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">送信</button>
+    </div>
+</form>
+    </div>
+    <script>
+        const scrollerInner = document.getElementById("scroller__inner");
+
+        // scrollerInner.scrollIntoView({block: "end", inline: "nearest"}) でもOK
+        scrollerInner.scrollIntoView(false);
+    </script>
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+{% endblock %}

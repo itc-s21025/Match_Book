@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% block extraheader %}
+<style>
+.ellipsis {
+    width: 300px; /* 省略せずに表示するサイズを指定 */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+</style>
+
+{% endblock %}
+{% block main %}
+    <h1>本の感想一覧</h1>
+
+    {% for thought in thoughts %}
+<div class="card mb-3" style="max-width: 700px;">
+  <div class="row g-0">
+    <div class="col-md-4">
+      <img src="{{ thought.book_image_url }}" class="img-fluid rounded-start" alt="...">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <h5 class="card-title">タイトル: {{ thought.book_title }} </h5>
+          <p class="card_text">著者: {{ thought.book_author }}</p>
+        <p class="card-text">記事作成者: {{ thought.create_by }}</p>
+        <p class="ellipsis"><small class="text-body-secondary">
+             {{ thought.book_description }}</small></p>
+          <p class="card-text"><a href="{% url 'book_thoughts_detail' thought.pk %}">詳しく記事を見る</a></p>
+      </div>
+
+    </div>
+  </div>
+</div>
+    {% endfor %}
+</div>
+{% endblock %}

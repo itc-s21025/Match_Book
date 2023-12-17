@@ -3,10 +3,31 @@
 {% block main %}
   <h2>通知一覧</h2>
 
+    {% if notifications %}
+    {% for notification in notifications %}
+            <div class="card w-50 p-3">
+                <h5 class="card-header">{{ notification.created_at }}</h5>
+                <div class="card-body">
+                    <div class="profile-thumb">
+                        <p><a href="{% url 'profile_detail' m.approaching.pk %}">
+                            <img src="{{ m.approaching.face_image.url }}" alt="アイコン">
+                        </a></p>
+                    </div>
+                    <p class="card-text">{{ m.approaching }}からいいねが届きました</p>
+                    <a href="{% url 'profile_detail' m.approaching.pk %}" class="btn btn-primary">プロフィールを見る</a>
+                </div>
+            </div>
+            <br>
+        {% endfor %}
+    {% else %}
+    <p>通知はありません。</p>
+  {% endif %}
+
   {% if notifications %}
     <ul>
       {% for notification in notifications %}
         <li>{{ notification.message }} - {{ notification.created_at }}</li>
+          <a href="{% url 'send_direct_message' notification.user_id %}">ダイレクトメッセージを送る</a>
       {% endfor %}
     </ul>
   {% else %}

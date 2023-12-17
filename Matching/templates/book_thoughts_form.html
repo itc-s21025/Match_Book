@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% block main %}
+    <div class="welcome">
+        <h3>本の感想を投稿しよう！！</h3>
+    </div>
+    <h5>本を検索</h5>
+
+    <!-- 検索フォーム -->
+    <form method="POST" action="{% url 'book_thoughts_form' %}">
+        {% csrf_token %}
+        <label for="query"></label>
+        <input type="text" name="query" id="query" required>
+        <button type="submit">Search</button>
+    </form>
+
+    <form method="post">
+
+        {% csrf_token %}
+        <div class="mb-3">
+            <h5>本のタイトル</h5>
+            <label for="id_book_title"></label>
+            <input type="text" name="book_title" maxlength="255" required id="id_book_title" value="{{ books }}">
+        </div>
+        <div class="mb-3">
+            <h5>著者</h5>
+            <label for="id_book_author"></label>
+            <input type="text" name="book_author" maxlength="255" required id="id_book_author"
+                   value="{{ book_author }}">
+        </div>
+        <div class="mb-3">
+            <h5>あらすじ</h5>
+            <label for="id_book_description"></label>
+            <textarea name="book_description" cols="40" rows="10" maxlength="1000" required
+                      id="id_book_description">{{ book_description }}
+     </textarea>
+        </div>
+        <div class="mb-3">
+            <h5>画像のURL</h5>
+            <label for="id_book_image_url"></label>
+            <input type="url" name="book_image_url" maxlength="200" id="id_book_image_url" value="{{ book_image_url }}">
+        </div>
+        <div class="mb-3">
+            <label for="id_book_thoughts"></label>
+            <h5>感想</h5>
+            <textarea name="book_thoughts" cols="40" rows="10" maxlength="10000" required
+                      id="id_book_thoughts"></textarea>
+        </div>
+        <div class="mb-3">
+            {% bootstrap_button button_type="submit" content="登録" %}
+        </div>
+    </form>
+{% endblock %}
+
+
+
+

@@ -1,37 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <!-- 通知ポーリングのJavaScriptコードを埋め込む -->
-    <script>
-        function checkNotifications() {
-            $.ajax({
-                url: '/api/notifications/',  // 通知を取得するエンドポイント
-                method: 'GET',
-                success: function(data) {
-                    // 取得した通知を処理する
-                    console.log(data);
-                    // 通知を表示する処理を追加
-                },
-                error: function(error) {
-                    console.error('Error fetching notifications:', error);
-                }
-            });
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+{% block extraheader %}
+    <style>
+        .profile-thumb {
+            overflow: hidden;
+            width: 110px;
+            height: 110px;
+            border: #fff 3px solid;
+            border-radius: 55px;
+            margin-top: 20px;
+            background: #fff;
         }
 
-        // 一定の間隔で通知をポーリング
-        setInterval(checkNotifications, 5000);  // 5秒ごとにポーリング
-    </script>
-</head>
-<body>
-<ul>
+        .profile-thumb img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+    </style>
+{% endblock %}
 
-    {% for notification in notifications %}
-        <li>{{ notification.message }} - {{ notification.created_at }}</li>
-    {% endfor %}
+{% block main %}
+        {% for m in matching %}
+            <div class="card w-50 p-3">
+                <h5 class="card-header">{{ m.created_at }}</h5>
+                <div class="card-body">
+                    <div class="profile-thumb">
+                        <p><a href="{% url 'profile_detail' m.approaching.pk %}">
+                            <img src="{{ m.approaching.face_image.url }}" alt="アイコン">
+                        </a></p>
+                    </div>
+                    <p class="card-text">{{ m.approaching }}からいいねが届きました</p>
+                    <a href="{% url 'profile_detail' m.approaching.pk %}" class="btn btn-primary">プロフィールを見る</a>
+                </div>
+            </div>
+            <br>
+        {% endfor %}
 
-</ul>
-</body>
-</html>
+{% endblock %}

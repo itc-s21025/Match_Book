@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% block main %}
+    <br>
+    <h3>投稿者：{{ thought.create_by }}</h3>
+    <p>投稿日：{{ thought.created_at }}</p>
+    {% if thought.book_image_url %}
+        <img src="{{ thought.book_image_url }}" alt="本の画像">
+    {% endif %}
+<h4>作品名：{{ thought.book_title }}</h4>
+    <p>著者：{{ thought.book_author }}</p>
+    <p>概要：{{ thought.book_description }}</p>
+    <hr>
+    <h4>感想</h4>
+    <p>{{ thought.book_thoughts }}</p>
+    <hr>
+    <p><a href="{% url 'profile_detail' thought.create_by.pk %}">{{ thought.create_by }}さんのプロフィールを見る</a></p>
+    <p><a href="{% url 'book_thoughts_list' %}">戻る</a></p>
+{% endblock %}
+
