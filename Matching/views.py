@@ -3,6 +3,7 @@ from operator import attrgetter
 
 from django.contrib.auth.decorators import login_required, user_passes_test
 import requests
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
@@ -40,33 +41,41 @@ def top(request):
 
     if opposite_gender:
         # 異性のプロフィールを取得
-        opposite_gender_profiles = Profile.objects.filter(sex=opposite_gender).exclude(pk__in=matching_profiles)
+        opposite_gender_profiles = Profile.objects.filter(sex=opposite_gender).exclude(pk__in=matching_profiles).order_by('-id')
 
         query = request.GET.get('q')
+        query2 = request.GET.get('q2')
 
         if query:
             # キーワードがある場合、モデルから検索を行う
             results = opposite_gender_profiles.filter(Q(like_book__icontains=query) |
-                                                      Q(favorite_author=query))  # name は検索対象のフィールド
+                                                      Q(favorite_author__icontains=query))
 
             context = {'results': results, 'query': query}
 
-            return render(request, 'top.html', context)
-
-        query2 = request.GET.get('q2')
-        if query2:
+        elif query2:
             # キーワードがある場合、モデルから検索を行う
-            results2 = opposite_gender_profiles.filter(Q(favorite_book_category__contains=query2))
+            results2 = opposite_gender_profiles.filter(favorite_book_category__icontains=query2)
 
             context = {'results2': results2, 'query2': query2}
 
-            return render(request, 'top.html', context)
-        context = {
-            'opposite_gender_profiles': opposite_gender_profiles,
+        else:
+            # ページネーションのための準備
+            page = request.GET.get('page', 1)
+            paginator = Paginator(opposite_gender_profiles, 3)  # 1ページに表示するプロフィール数
+            try:
+                opposite_gender_profiles_paginated = paginator.page(page)
+            except PageNotAnInteger:
+                opposite_gender_profiles_paginated = paginator.page(1)
+            except EmptyPage:
+                opposite_gender_profiles_paginated = paginator.page(paginator.num_pages)
 
-        }
+            context = {
+                'opposite_gender_profiles_paginated': opposite_gender_profiles_paginated,
+            }
 
         return render(request, 'top.html', context)
+
 
 
     else:
@@ -125,6 +134,17 @@ def profile_detail(request, profile_id):
     return render(request, 'profile_detail.html', {'profile': profile, 'user': profile_id,
                                                    'request_user': request_user, 'matching': matching,
                                                    'thoughts': thoughts, 'matching_profile': matching_profiles})
+
+@login_required
+def my_page(request):
+    request_user = request.user.profile.pk
+    my_profile = get_object_or_404(Profile, pk=request_user)
+    thoughts = BookThoughts.objects.filter(create_by_id=request_user)
+    context = {
+        'my_profile': my_profile, 'thoughts': thoughts,
+    }
+
+    return render(request, 'mypage.html', context)
 
 def send_liked(request):
     return render(request, 'liked_page.html')
@@ -192,24 +212,6 @@ def send_direct_message(request, receiver_id):
     return render(request, 'send_direct_message.html', context)
 
 
-@login_required
-def direct_messages(request, receiver_id):
-    receiver = get_object_or_404(Profile, pk=receiver_id)
-    messages_sent = DirectMessage.objects.filter(sender=request.user.profile, receiver=receiver)
-    messages_received = DirectMessage.objects.filter(receiver=request.user.profile, sender=receiver)
-
-    # 送信と受信のメッセージを一つのリストにまとめ、日付の新しい順にソート
-    all_messages = sorted(
-        chain(messages_sent, messages_received),
-        key=attrgetter('created_at'),
-        reverse=True
-    )
-
-    context = {
-        'all_messages': all_messages,
-    }
-    return render(request, 'direct_messages.html', context)
-
 
 def get_notifications(request):
     user_notifications = Notification.objects.filter(user=request.user.profile.pk)
@@ -259,17 +261,6 @@ def get_book_info(query):
 
 
 # 本のタイトル検索view
-@login_required
-def book_search(request):
-    if request.method == 'POST':
-        query = request.POST.get('query', '')
-
-        books = get_book_info(query)
-        context = {'books': books}
-
-        return render(request, 'book_search_form.html', context)
-
-    return render(request, 'book_search_form.html')
 
 
 # 本の感想投稿view

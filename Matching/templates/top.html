@@ -3,7 +3,7 @@
 
 {% block extraheader %}
     <link rel="stylesheet" href="{% static 'css/profile.css' %}">
-
+    <link rel="stylesheet" href="{% static 'css/header_nav.css' %}">
     <style>
 
         @media (min-width: 600px) {
@@ -55,6 +55,35 @@
             background-color: #b03ec0;
         }
 
+        /* Pagination Styles */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .step-links {
+            display: flex;
+            list-style: none;
+            padding: 0;
+        }
+
+        .step-links a {
+            color: rgb(15, 38, 46);
+            padding: 8px 16px;
+            text-decoration: none;
+            border: 1px solid #0f262e;
+            border-radius: 4px;
+            margin-right: 5px;
+        }
+
+        .step-links a:hover {
+            background-color: #905757;
+            color: #fff;
+        }
+
+
+
     </style>
 {% endblock %}
 {% block main %}
@@ -83,21 +112,22 @@
 
                     {% for profile in results %}
                         <div class="flex">
-                        <div class="profile-card" id="profile">
-                        <div class="profile-card__inner">
-                            <div class="profile-thumb">
-                                <p><a href="{% url 'profile_detail' profile.pk %}">
-                                    <img src="{{ profile.face_image.url }}" alt="アイコン">
-                                </a></p>
-                            </div>
-                            <div class="profile-content">
-                                <span class="profile-name">{{ profile.create_by }}</span>
-                                <span class="profile-job">{{ profile.age }}歳</span>
-                                <hr class="hr1">
-                                <span class="profile-intro">{{ profile.introduction }}</span>
+                            <div class="profile-card" id="profile">
+                                <div class="profile-card__inner">
+                                    <div class="profile-thumb">
+                                        <p><a href="{% url 'profile_detail' profile.pk %}">
+                                            <img src="{{ profile.face_image.url }}" alt="アイコン">
+                                        </a></p>
+                                    </div>
+                                    <div class="profile-content">
+                                        <span class="profile-name">{{ profile.create_by }}</span>
+                                        <span class="profile-job">{{ profile.age }}歳</span>
+                                        <hr class="hr1">
+                                        <span class="profile-intro">{{ profile.introduction }}</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-
                     {% endfor %}
                 {% else %}
                     <p>検索結果がありません。</p>
@@ -111,50 +141,75 @@
                 {% if results2 %}
 
                     <ul>
-                    {% for profile in results2 %}
-                        <div class="flex">
-                        <div class="profile-card">
-                        <div class="profile-card__inner">
+                        {% for profile in results2 %}
+                            <div class="flex">
+                                <div class="profile-card">
+                                    <div class="profile-card__inner">
 
-                            <div class="profile-thumb">
-                                <p><a href="{% url 'profile_detail' profile.pk %}">
-                                    <img src="{{ profile.face_image.url }}" alt="アイコン">
-                                </a></p>
+                                        <div class="profile-thumb">
+                                            <p><a href="{% url 'profile_detail' profile.pk %}">
+                                                <img src="{{ profile.face_image.url }}" alt="アイコン">
+                                            </a></p>
+                                        </div>
+
+                                        <div class="profile-content">
+                                            <span class="profile-name">{{ profile.create_by }}</span>
+                                            <span class="profile-job">{{ profile.age }}歳</span>
+                                            <hr class="hr1">
+                                            <span class="profile-intro">{{ profile.introduction }}</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-
-                            <div class="profile-content">
-                                <span class="profile-name">{{ profile.create_by }}</span>
-                                <span class="profile-job">{{ profile.age }}歳</span>
-                                <hr class="hr1">
-                                <span class="profile-intro">{{ profile.introduction }}</span>
-                            </div>
-                        </div>
-
-                    {% endfor %}
+                            </ul>
+                        {% endfor %}
+                    </div>
                 {% else %}
                     <p>検索結果がありません。</p>
                 {% endif %}
             {% else %}
             {% endif %}
 
-            {% for profile in opposite_gender_profiles %}
+        {% for profile in opposite_gender_profiles_paginated %}
 
-                <div class="profile-card">
-                    <div class="profile-card__inner">
-                        <div class="profile-thumb">
-                            <p><a href="{% url 'profile_detail' profile.pk %}">
-                                <img src="{{ profile.face_image.url }}" alt="アイコン">
-                            </a></p>
-                        </div>
-                        <div class="profile-content">
-                            <span class="profile-name">{{ profile.create_by }}</span>
-                            <span class="profile-job">{{ profile.age }}歳</span>
-                            <hr class="hr1">
-                            <span class="profile-intro">{{ profile.introduction }}</span>
-                        </div>
+            <div class="profile-card">
+                <div class="profile-card__inner">
+                    <div class="profile-thumb">
+                        <p><a href="{% url 'profile_detail' profile.pk %}">
+                            <img src="{{ profile.face_image.url }}" alt="アイコン">
+                        </a></p>
+                    </div>
+                    <div class="profile-content">
+                        <span class="profile-name">{{ profile.create_by }}</span>
+                        <span class="profile-job">{{ profile.age }}歳</span>
+                        <hr class="hr1">
+                        <span class="profile-intro">{{ profile.introduction }}</span>
                     </div>
                 </div>
-                <div class="padding"><br>
-            {% endfor %}
+
+            </div>
+
+
+
+            <div class="padding"><br></div>
+        {% endfor %}
+        <div class="pagination">
+        <span class="step-links">
+            {% if opposite_gender_profiles_paginated.has_previous %}
+                <a href="?page=1">&laquo; 最初のページへ</a>
+                <a href="?page={{ opposite_gender_profiles_paginated.previous_page_number }}">前のページへ</a>
+            {% endif %}
+
+
+            {% if opposite_gender_profiles_paginated.has_next %}
+                <a href="?page={{ opposite_gender_profiles_paginated.next_page_number }}">次のページへ</a>
+                <a href="?page={{ opposite_gender_profiles_paginated.paginator.num_pages }}">最後のページへ &raquo;</a>
+            {% endif %}
+        </span>
+        </div>
+
+
+    </div>
+
 
 {% endblock %}

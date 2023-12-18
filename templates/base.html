@@ -8,8 +8,10 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     {% block extraheader %}{% endblock %}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" href="{% static 'img/favicon.ico' %}" id="favicon">
     <style>
         @import url('https://fonts.googleapis.com/css?family=Sacramento');
+
 
         .title {
             font-family: 'Sacramento', cursive;
@@ -30,6 +32,22 @@
         h1 {
             font-family: 'MatchBook', cursive;
         }
+
+        .footer {
+            padding-top: 10px;
+            width: 100%;
+            height: 60px;
+            background-color: rgb(56, 36, 10);
+            position: absolute; /*←絶対位置*/
+            bottom: 0; /*下に固定*/
+        }
+
+        .wrapper {
+            min-height: 70vh;
+            position: relative; /*←相対位置*/
+            padding-bottom: 50px; /*←footerの高さ*/
+            box-sizing: border-box; /*←全て含めてmin-height:100vhに*/
+        }
     </style>
 
 </head>
@@ -46,7 +64,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active text-light" aria-current="page" href="#">Home</a>
+                    <a class="nav-link active text-light" aria-current="page" href="{% url 'top' %}">Home</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle text-light" href="#" role="button" data-bs-toggle="dropdown"
@@ -72,18 +90,18 @@
 
                 </li>
 
-                <li class="nav-item">
-                    <a class="nav-link disabled text-light">Disabled</a>
+               <li class="nav-item">
+                    <a class="nav-link active text-light" aria-current="page" href="{% url 'my_page' %}">MyPage</a>
                 </li>
             </ul>
             <ul class="navbar-nav">
-                {% if user.is_authenticated %}
+                {% if request.user.is_authenticated %}
                     <li class="nav-item">
-                        <a href="{% url 'logout' %}" class="nav-link text-light">ログアウト</a>
+                        <a href="{% url 'logout' %}" class="nav-link text-light">logout</a>
                     </li>
                 {% else %}
                     <li class="nav-item">
-                        <a href="{% url 'login' %}" class="nav-link text-light">ログイン</a>
+                        <a href="{% url 'login' %}" class="nav-link text-light">login</a>
                     </li>
                 {% endif %}
             </ul>
@@ -96,6 +114,14 @@
         {% block main %}{% endblock %}
     </div>
 </main>
+<br>
+<div class="wrapper">
+    <footer class="footer">
+        <div class="container text-center">
+            <p class="text-muted">©︎2023 MatchBook</p>
+        </div>
+    </footer>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.min.js"></script>
 </body>
