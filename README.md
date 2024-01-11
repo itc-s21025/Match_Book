@@ -11,6 +11,26 @@
 本のisbn番号を入力していただくと本のタイトル、著者、あらすじが自動で入力されます。  
 本の感想をユーザーに登録してもらうことで、マッチングする際の判断材料が増えます。  
 #  3, 使い方  
+## 3-1, 新規登録・ログインをする
+![login](readme/img/login.png)
+
+## 3-2, 気になる相手を見つける
+![home](readme/img/home.png)
+
+## 3-3, プロフィールを見てマッチングしたい場合はいいねを相手に送る
+![profile](readme/img/profile.png)
+
+## 3-4, お互いにいいねを送りあった場合、マッチングが成立
+![matching](readme/img/matching.png)
+
+## 3-5, マッチングが成立すれば、ダイレクトメッセージを送ることができる
+![direct_message](readme/img/directmessage.png)
+
+## 3-6, ユーザーの本の感想を見て、気になる相手を見つける
+![book_list](readme/img/book_list.png)
+
+## 3-7, 自分が読んだ本の感想を投稿して、相手のマッチング判断材料を増やす
+![book_form](readme/img/book_form.png)
 
 #  4, 使用環境  
 このマッチングサイトはWebアプリケーションなので、ブラウザが使用できる環境であれば使えます。
